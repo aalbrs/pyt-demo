@@ -1,4 +1,4 @@
-# Python Toolbox Demo
+# ArcGIS Pro Python Toolbox Demo
 
 A starting point for .pyt (Python Toolbox) files for use in ArcGIS Pro, with a separate debugger script to make things easy. 
 
@@ -10,4 +10,4 @@ Then run/debug the module:
 ```
 toolbox_debugger.py
 ```
-Where possible logic should be written outside of the .pyt file, such as in run_tool.py.  
+Where possible logic should be written outside of the .pyt file, such as in the toolbox_library directory.  
