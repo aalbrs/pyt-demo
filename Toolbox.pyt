@@ -19,7 +19,7 @@ class Tool(object):
     def __init__(self):
         """Define the tool (tool name is the name of the class)."""
         self.label = "Demo Tool"
-        self.description = ""
+        self.description = "Demonstrates accessing a map within a project (.aprx file)"
         self.canRunInBackground = True
 
     def getParameterInfo(self):
@@ -27,22 +27,21 @@ class Tool(object):
         # https://pro.arcgis.com/en/pro-app/latest/arcpy/geoprocessing_and_python/defining-parameter-data-types-in-a-python-toolbox.htm
 
         param0 = arcpy.Parameter(
-            displayName="Text Example",
-            name="text1",
+            displayName="Map Name",
+            name="map_name",
             datatype="GPString",
             parameterType="Optional",
             direction="Input")
 
         param1 = arcpy.Parameter(
-            displayName="Workspace Example",
-            name="workspace1",
-            datatype="DEWorkspace",
+            displayName="Project Containing Map (Filepath or \"CURRENT\")",
+            name="proj_path",
+            datatype="GPString",
             parameterType="Optional",
             direction="Input")
 
         params = [param0, param1]
         return params
-
 
     def isLicensed(self):
         """Set whether tool is licensed to execute."""
@@ -62,8 +61,15 @@ class Tool(object):
     def execute(self, parameters, messages):
         """The source code of the tool."""
 
-        text1 = parameters[0].valueAsText
-        workspace1 = parameters[1].valueAsText
+        # gather parameters by index
+        map_name = parameters[0].valueAsText
+        project_path = parameters[1].valueAsText
 
-        run_tool.do_execute(text1, workspace1)
-        return
+        # We want to pass a project object to the main script, rather than text.
+        # Note that "CURRENT" will access current project in Pro.
+        project = None
+        if project_path:
+            project = arcpy.mp.ArcGISProject(project_path)
+
+        # call our main script
+        run_tool.do_execute(map_name, project)
